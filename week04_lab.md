@@ -643,9 +643,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
 > 3. สังเกตว่าค่าทั้งสองตัวเท่ากันหรือไม่ แล้วเขียนสรุป 2-3 บรรทัดเป็น Comment ในโค้ดว่า `MediaQuery.of(context).size.width` (ความกว้างของทั้งหน้าจอ) กับ `LayoutBuilder` `constraints.maxWidth` (ความกว้างที่ Widget นั้น ๆ ได้รับจาก Parent) ต่างกันอย่างไร และควรเลือกใช้ตัวไหนเมื่อไหร่
 
 บันทึกรูปผลการทดลอง
-```image
-บันทึกรูปโค้ด และรูปผลการทดลองที่นี่ (กรณีที่ยังไม่สามารถรันได้ ให้ทดลองจนถึงขั้นตอนที่สามารถ capture รูปได้และบันทึกรูปไว้ในส่วนนี้)
-```
+
+<img width="1300" height="768" alt="4" src="https://github.com/user-attachments/assets/1a5c566a-fed2-4f10-9419-79010a250a7f" />
+
+<img width="1028" height="734" alt="3" src="https://github.com/user-attachments/assets/3bc3c6dd-cdfa-4296-86a5-4f0618b6ad08" />
+
 
 #### ขั้นตอนที่ 4.2 — Destination Detail Screen
 
