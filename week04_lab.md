@@ -1574,23 +1574,56 @@ GoRoute(
 **ตอบคำถามต่อไปนี้:**
 
 1. `LayoutBuilder` ต่างกับ `MediaQuery` อย่างไร? มีหลักการเลือกใช้แต่ละแบบในสถานการณ์ใด?
-```text
-
+```
+MediaQuery: วัดขนาด "ทั้งหน้าจอ" เหมาะใช้แบ่ง UI ใหญ่ๆ เช่น แยกมือถือกับแท็บเล็ต
+LayoutBuilder: วัดขนาด "พื้นที่ของกล่องแม่" เหมาะใช้ปรับการ์ดหรือ Grid เฉพาะจุดให้ยืดหดตามพื้นที่ที่มี
 ```
 2. ทำไม Go Router ถึงใช้ `StatefulShellRoute` แทน `ShellRoute` ธรรมดา? ผลต่างเรื่อง State Management คืออะไร?
-```text
-
+```
+ShellRoute (แบบธรรมดา): พอสลับ Tab แล้วหน้าเดิมถูกลบ สกรอลล์ค้างไว้ก็เด้งกลับไปบนสุด ข้อมูลที่พิมพ์ไว้หาย
+StatefulShellRoute: สลับ Tab แล้วหน้าเดิมแค่ถูกซ่อนไว้ ข้อมูล สกรอลล์ และ State ทุกอย่างอยู่ครบเหมือนเดิม
 ```
 3. ในโค้ด `DestinationCard` เหตุใดจึงใช้ `Expanded` ครอบ `Text` ชื่อ Destination ? จะเกิดอะไรขึ้นถ้าลบออก?
-```text
-
+```
+เหตุผล: บังคับให้ชื่อกินพื้นที่ "เท่าที่เหลืออยู่" จากราคา
+ถ้าลบออก: พอเจอชื่อสถานที่ยาวๆ ข้อความจะดันเกินจอ เกิดแถบสีเหลืองสลับดำเตือน (RenderFlex Overflow)
 ```
 4. การส่งข้อมูลผ่าน `extra` ของ Go Router มีข้อจำกัดอะไรกรณี Deep Link / Web Refresh? และแก้ปัญหานี้ได้อย่างไร?
-```text
+```
+ข้อจำกัด: extra เก็บข้อมูลไว้ในแรม พอผู้ใช้ กด Refresh หน้าเว็บ หรือ เข้าผ่านลิงก์ตรง (Deep Link) ค่า extra จะกลายเป็น null ทันที (แอปค้าง/พัง)
+วิธีแก้ (Fallback): พ่วง ID ไปกับ URL ด้วยเสมอ ถ้าเปิดมาแล้ว extra เป็น null ก็เอา ID นั้นไปค้นหาข้อมูลจากลิสต์มาแสดงแทน
 
 ```
 5. วาด Navigation Hierarchy ของแอปนี้ (สามารถวาดบนกระดาษแล้วถ่ายรูปส่งได้)
-```text
+```
+App Root (MaterialApp.router)
+│
+└── ScaffoldWithNavBar (StatefulShellRoute - Bottom Navigation Bar)
+    │
+    ├── Branch1: หน้าหลัก (Home)
+    │   └── Path: '/' (name: 'home') ➔ HomeScreen
+    │       ├── Action: กด "ดูทั้งหมด" ➔ ไปที่ '/explore' (Tab 2)
+    │       └── Action: กดการ์ดสถานที่ ➔ ไปที่ '/explore/destinations/:id'
+    │
+    ├── Branch2: สำรวจ (Explore)
+    │   └── Path: '/explore' (name: 'explore') ➔ ExploreScreen
+    │       │   (มี Search Bar & Filter Chips ในตัว)
+    │       │
+    │       └── Sub-Route: 'destinations/:id'
+    │           └── Full Path: '/explore/destinations/:id' (name: 'destination-detail')
+    │               ➔ DestinationDetailScreen
+    │
+    ├── Branch3: บันทึก (Saved)
+    │   └── Path: '/saved' (name: 'saved') ➔ SavedScreen
+    │       ├── Action: กด "ไปสำรวจสถานที่" (กรณียังไม่มีเซฟ) ➔ ไปที่ '/explore'
+    │       └── Action: กดการ์ดสถานที่ ➔ ไปที่ '/explore/destinations/:id'
+    │
+    ├── Branch4: โปรไฟล์ (Profile)
+    │   └── Path: '/profile' (name: 'profile') ➔ ProfileScreen
+    │       └── Overlay: EditProfileDialog (Dialog แก้ไขชื่อ/อีเมล/เบอร์)
+    │
+    └── Branch5: เกี่ยวกับ (About)
+        └── Path: '/about' (name: 'about') ➔ AboutScreen
 
 ```
 ---
